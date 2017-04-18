@@ -128,7 +128,7 @@ header .header-phone .phone-number {
 }
 
 .main-content .form-container p.disclaimer {
-	
+
 }
 .main-content .form-container p.disclaimer a {
 	color:white;
@@ -280,6 +280,15 @@ footer {
 	text-align: center;
 }
 
+/********
+	ERROR VALIDATION
+******************/
+
+label.error {
+	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 0;
+}
 
 /********
 	MEDIA QUERIES
@@ -357,7 +366,7 @@ footer {
 
 @media only screen and (max-width : 767px) {
 
-	
+
 	header .header-phone {
 		text-align: center;
 		margin-top:25px;
@@ -425,5 +434,3 @@ footer {
 		font-size: 25px;
 	}
 }
-
-

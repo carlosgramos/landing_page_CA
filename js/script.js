@@ -95,9 +95,10 @@ var routeType = 'data_direct';
 
 //Trigger AJAX request using GET (default for information sent via query string)
 $('#start').click(function(event){
-  var valid = $('#lead-form').valid();
-  // console.log(x);
-  if(valid != true) {    
+
+	var valid = $('#lead-form').valid();
+
+  if(valid !== true) {
     event.preventDefault();
     $('#notValidModal').modal('show');
   } else {
@@ -111,7 +112,8 @@ $('#start').click(function(event){
     var state = 'fl';
     var zip = $('input[name="zip"]').val(); //Note: this is Canadian format (e.g. K1A 0G9)
     var country = 'CA';
-    var source = location.hostname;
+		var source = 'www.google.com';
+		// var source = location.hostname;
     var ccDebtAmount = $('select[name="debtamount"]').val();
     var ipAddress = $('input[name="ip-address"]').val();
     var optIn = '1';
@@ -120,12 +122,11 @@ $('#start').click(function(event){
     1 - To build more complex URL's follow the example below from Venturetech docs:
     2- https://marketingapi.vtgr.net/?apikey=paXyp86qoM05pGTXmjyVg88P6AE9DpSn&ckm_campaign_id=13585&ckm_key=NcoqpUdw2qw&vid=82&aff_id=954&pid=96339&first_name=Contact&last_name=Us&email=cccscctest954@vtsqa.com&primary_phone=7543326039&state=fl&country=CA&debtamount=11000&ip_address=63.25.58.7&source=www.google.com&ckm_subid=963398&ckm_subid_2=test&ckm_subid_3=test&ckm_subid_4=test&ckm_subid_5=test&opt_in=1
     */
-    
-    var url = "https://marketingapi.vtgr.net/?apikey=" + apiKey + "&ckm_campaign_id=" + campaignID + "&ckm_key=" + postKey + "&vid=" + verticalID + "&aff_id=" + affiliateID + "&pid="+ partnerID + "&first_name=" + firstName + "&last_name=" + lastName + "&email=" + email + "&primary_phone=" + primaryPhone + "&state=" + state + "&country=" + country + "&debtamount=" + ccDebtAmount + "&ip_address=" + ipAddress + "&source=" + source + "&ckm_subid=" + subID1 + "&opt_in=" + optIn + " ";
-    // console.log(url);
 
+    var url = "https://marketingapi.vtgr.net/?apikey=" + apiKey + "&ckm_campaign_id=" + campaignID + "&ckm_key=" + postKey + "&vid=" + verticalID + "&aff_id=" + affiliateID + "&pid="+ partnerID + "&first_name=" + firstName + "&last_name=" + lastName + "&email=" + email + "&primary_phone=" + primaryPhone + "&state=" + state + "&country=" + country + "&debtamount=" + ccDebtAmount + "&ip_address=" + ipAddress + "&source=" + source + "&ckm_subid=" + subID1 + "&opt_in=" + optIn + "";
+		console.log(url);
     /*****Initiate AJAX call*****/
-  
+
     $.ajax({
       url: url,
       dataType: 'JSONP',
@@ -136,10 +137,18 @@ $('#start').click(function(event){
           var parsedResp = JSON.parse(response);
 
           if (parsedResp.Status === 'Errors'){
-            $('#errorModal').modal('toggle');
-          } else if (parsedResp.Status === 'Success')  {
-             window.location.replace(parsedResp.Cake.Redirect);
-          }
+						$('#errorModal').modal('toggle');
+					} else if (parsedResp.Status === 'Success')  {
+						var redirect = parsedResp.Cake;
+						//Extract redirect link from Marketing API response
+						if(redirect != 'undefined'){
+							redirect = redirect.split('":"');
+							redirect = redirect[5];
+							redirect = redirect.split('","');
+							redirect = redirect[0];
+							location.replace(redirect);
+						}
+					}
       },
       error: function(jqXHR, exception){
         var msg = '';
@@ -159,9 +168,9 @@ $('#start').click(function(event){
             msg = 'Uncaught Error.\n' + jqXHR.responseText;
         }
         alert(msg);
-      }, 
-    });//end of AJAX call 
-  
+      },
+    });//end of AJAX call
+
   }//end if
 
 }); //end #start click function

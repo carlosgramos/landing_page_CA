@@ -281,13 +281,31 @@ footer {
 }
 
 /********
-	ERROR VALIDATION
+	ERROR MESSAGING
 ******************/
+
+/*Inner <p> for alert messages can be found on script.js, .prepend() function*/
+.alert-message {
+	max-height: 200px;
+	margin-bottom: 10px;
+	background-color: #79A7CC;
+	font-size: 20px;
+	font-weight: normal;
+	display: none;
+}
 
 label.error {
 	display: inline-block;
 	margin-top: 10px;
 	margin-bottom: 0;
+}
+
+/********
+	SPINNER
+**********/
+
+.ladda-button > span.ladda-spinner !important {
+	top: 12px;
 }
 
 /********

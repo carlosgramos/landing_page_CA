@@ -67,21 +67,37 @@ $('#lead-form').validate({
       required: 'Please enter your last name',
       lettersonly: 'Only letters are allowed',
     },
-    email: 'Please enter your email',
+    email: 'Please correct your email',
     primary_phone: 'Please enter your phone number',
     zip: {
-      required: 'Please enter your zip code',
+      required: 'Please correct your zip code',
       postalCodeCA: 'Please enter a valid CA zip code',
     },
     debtamount: {
       mustNotEqual: 'Please select a debt amount',
     },
   }//end messages
-});//end form validation
+});
+/*****End user input validation*****/
 
-// /*****End user input validation*****/
+/*****Create spinner effect for submit button*********/
+var spinner = Ladda.create(document.querySelector('#start'));
 
-// /*****Begin AJAX post*****/
+/*****Create function to empty out error message div*****/
+
+function emptyErrorMessages(){
+	if( ! $('.alert-message').is(':empty')){
+		$('.alert-message > p').remove();
+		$('.alert-message').hide();
+	}
+}
+
+/*****Begin AJAX post*****/
+
+//Create function to handle Cake Data for future use and display success message to user
+function handleCakeSuccess() {
+	$('.alert-message').addClass('success').prepend('<p>Thank you for submitting your information.</p><p>A debt counselor will contact you soon.').toggle();
+}
 
 //Campaign values
 var apiKey = 'paXyp86qoM05pGTXmjyVg88P6AE9DpSn';
@@ -94,17 +110,18 @@ var subID1 = '96339';
 var routeType = 'data_direct';
 
 //Trigger AJAX request using GET (default for information sent via query string)
-$('#start').click(function(event){
-
-	var valid = $('#lead-form').valid();
-
-  if(valid !== true) {
-    event.preventDefault();
-    $('#notValidModal').modal('show');
-  } else {
-
-    //Lead Values - user supplied values (from lead form) and hard-coded values
-
+$('#start').click(function(){
+	//Validate form using jQuery Validate Plugin .valid() method
+	if($('#lead-form').valid() === false) {
+		/*First, check if there are <p> tags in divs from prior alerts, and remove them to avoid multiple <p> tags
+		then, alert the customer*/
+		emptyErrorMessages();
+		$('.alert-message').addClass('warning').prepend('<p>Please fill out all the required fields before submitting the form.</p>').toggle();
+	} else {
+		/*If there are <p> tags in divs from prior alerts, and remove them to avoid multiple <p> tags
+		 and hide alert div after successful submission*/
+		emptyErrorMessages();
+		//Lead Values - user supplied values (from lead form) and hard-coded values
     var firstName = $('input[name="first_name"]').val();
     var lastName = $('input[name="last_name"]').val();
     var primaryPhone = $('input[name="primary_phone"]').val();
@@ -132,22 +149,21 @@ $('#start').click(function(event){
       dataType: 'JSONP',
       jsonpCallback: 'callback',
       type: 'GET',
-      // success: function (response) {
-      success: function (response) {
-          var parsedResp = JSON.parse(response);
+			beforeSend: function() {
+				spinner.start();
+      },
+      success: function (data) {
+					//Receive JSON response from Cake
+					var cakeData = JSON.parse(data);
 
-          if (parsedResp.Status === 'Errors'){
-						$('#errorModal').modal('toggle');
-					} else if (parsedResp.Status === 'Success')  {
-						var redirect = parsedResp.Cake;
-						//Extract redirect link from Marketing API response
-						if(redirect != 'undefined'){
-							redirect = redirect.split('":"');
-							redirect = redirect[5];
-							redirect = redirect.split('","');
-							redirect = redirect[0];
-							location.replace(redirect);
-						}
+					if (cakeData.Status === 'Success') {
+						emptyErrorMessages();
+						handleCakeSuccess();
+						spinner.stop();
+					} else if (cakeData.Status === 'Errors') {
+						emptyErrorMessages();
+						$('.alert-message').addClass('failure').prepend('<p>We were unable to process your submission.</p><p>Please try again.</p>').toggle();
+						spinner.stop();
 					}
       },
       error: function(jqXHR, exception){
@@ -170,7 +186,6 @@ $('#start').click(function(event){
         alert(msg);
       },
     });//end of AJAX call
-
   }//end if
 
 }); //end #start click function

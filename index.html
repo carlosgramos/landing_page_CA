@@ -7,6 +7,8 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda-themeless.min.css">
+
 <link rel="stylesheet" href="./css/style.css" >
 
 </head>
@@ -54,6 +56,9 @@
 			<div class="col-sm-8">
 				<div class="form-container">
 					<h3>Get our team working for you today.</h3>
+
+					<div class="alert-message">
+					</div>
 
 					<form id="lead-form">
 						<div class="row">
@@ -110,7 +115,7 @@
 							</div>
 						</div>
 						<input type="hidden" name="ip-address">
-						<button id="start" type="button" class="btn btn-primary">Start</button>
+						<button id="start" type="button" class="btn btn-primary ladda-button" data-style="expand-left"><span class="ladda-label">Start</span></button>
 					</form>
 					<p class="disclaimer">Your personal data is completely protected. <a href="#">Read our policy here.</a></p>
 					<p class="disclaimer">By submitting your information above you consent by electronic signature to: receive calls from Consolidated Credit from a live agent, artificial or prerecorded voice, and/or SMS text (standard cellular rates may apply) at my residential or cellular number, dialed manually or by autodialer. I understand that I am under no obligation to purchase anything.</p>
@@ -202,44 +207,6 @@
 	</div>
 </footer>
 
-<!-- Form not valid Modal -->
-<div id="notValidModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Please fill out the form</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some information is missing or incorrect. Please try again.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- End Modal -->
-
-<!-- Submission Error Modal -->
-<div id="errorModal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Unsuccesful Submission</h4>
-      </div>
-      <div class="modal-body">
-        <p>We encountered an error while submitting your information. Please try again.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- End Modal -->
-
 <script type="application/javascript">
   function getIP(json) {
      $('input[name="ip-address"]').val(json.ip);
@@ -249,8 +216,13 @@
 <!-- Begin jquery validation plugin-->
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-<!-- End jquery validation plugin -->
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Spinner button -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/spin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.0/ladda.min.js"></script>
+
 <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <script src="./js/script.js"></script>
 
